@@ -120,12 +120,14 @@ namespace KinoGuide.Controllers
             return RedirectToAction("View", new { id = film.Id });
         }
 
+        [Authorize]
         public ActionResult New()
         {
-            return View(new NewFilmViewModel());
+            return View(new NewFilmViewModel { Author = User.Identity.Name });
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult New(NewFilmViewModel model)
         {
@@ -139,7 +141,7 @@ namespace KinoGuide.Controllers
                 Name = model.Name,
                 Director = model.Director,
                 Description = model.Description,
-                User = _db.Users.Single(x => x.Login == "Admin"),
+                User = new User { Id = User.Identity.GetUserId() },
                 Year = model.Year
             };
             using (var binaryReader = new BinaryReader(model.FilePoster.InputStream))

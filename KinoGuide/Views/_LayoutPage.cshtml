@@ -21,7 +21,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Список фильмов", "Index", "Film")</li>
-                    <li>@Html.ActionLink("Добавить фильм", "New", "Film", new { @disabled = !Request.IsAuthenticated})</li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Добавить фильм", "New", "Film")</li>
+                    } else
+                    {
+                        <li class="disabled"><a href="javascript:false;">Добавить фильм</a></li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Request.IsAuthenticated)
