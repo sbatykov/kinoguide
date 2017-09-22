@@ -1,0 +1,48 @@
+﻿@using  KinoGuide.Models
+@using  KinoGuide.Identity
+@model FilmViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title pull-left">@Model.Name</h2>
+        @if (Request.IsAuthenticated && User.Identity.GetUserId() == Model.AuthorId)
+        {
+            <a href=@Url.Action("Edit", new { id = Model.Id }) class="pull-right">Изменить</a>
+        }
+        <div class="clearfix"></div>
+    </div>
+    <div class="media">
+        <div class="media-left media-middle">
+            <img class="media-object" style="width: 300px" src=@Url.Action("Index", "Image", new { id = Model.Id }) />
+        </div>
+        <div class="media-body media-middle">
+            <table class="table">
+                <tr>
+                    <td class="display">@Html.DisplayNameFor(_ => _.Year)</td>
+                    <td>@Model.Year</td>
+                </tr>
+                <tr>
+                    <td class="display">@Html.DisplayNameFor(_ => _.Director)</td>
+                    <td>@Model.Director</td>
+                </tr>
+                <tr>
+                    <td class="display">@Html.DisplayNameFor(_ => _.Description)</td>
+                    <td>@Model.Description</td>
+                </tr>
+                <tr>
+                    <td class="display">@Html.DisplayNameFor(_ => _.Author)</td>
+                    <td>@Model.Author</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel-body">
+    </div>
+</div>
+

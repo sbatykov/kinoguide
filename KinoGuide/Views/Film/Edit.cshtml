@@ -1,0 +1,88 @@
+﻿@using  KinoGuide.Models
+@model FilmViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/_LayoutPage.cshtml";
+}
+
+@using (@Html.BeginForm("Edit", "Film", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title pull-left">
+                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Name)
+            </div>
+            <a href=@Url.Action("View", new { id = Model.Id }) class="pull-right">Отменить</a>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="media">
+                <div class="media-left media-middle">
+                    <div style="width: 300px" class="js-media">
+                        <img class="media-object" style="width: 300px" src=@Url.Action("Index", "Image", new { id = Model.Id }) />
+                        @Html.TextBoxFor(x => x.FilePoster, new { @type = "file", @onchange="PreviewFile()" })
+                        @Html.ValidationMessageFor(x => x.FilePoster)
+                    </div>
+                </div>
+                <div class="media-body media-middle">
+                    <table class="table">
+                        <tr>
+                            <td class="display">@Html.LabelFor(_ => _.Year)</td>
+                            <td>
+                               @Html.TextBoxFor(x => x.Year, new { @class = "form-control" } )
+                               @Html.ValidationMessageFor(x => x.Year)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="display">@Html.LabelFor(_ => _.Director)</td>
+                            <td>
+                                @Html.TextBoxFor(x => x.Director, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(x => x.Director)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="display">@Html.LabelFor(_ => _.Description)</td>
+                            <td>
+                                @Html.TextAreaFor(x => x.Description, new { @class = "form-control", @rows = 10 })
+                                @Html.ValidationMessageFor(x => x.Description)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="display">@Html.LabelFor(_ => _.Author)</td>
+                            <td>@Model.Author</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-footer text-center">
+            <input class="btn btn-primary" type="submit" value="Сохранить"/>
+        </div>
+    </div>
+}
+
+@section scripts{
+<script>
+    function PreviewFile() {
+        var preview = $(".js-media img");
+        var file = $(".js-media input[type=file]").prop("files")[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.attr("src", reader.result);
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "";
+        }
+    }
+</script>    
+}
